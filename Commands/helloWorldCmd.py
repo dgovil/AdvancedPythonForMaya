@@ -2,11 +2,13 @@
 # It's important to import it from maya.api so we get the Python API 2.0
 from maya.api import OpenMaya as om
 
+
 # Just having a function of this name inside our plugin, tells Maya that it's being built using the Python 2 API.
 # This is important so that Maya knows how to interact with it internally.
 def maya_useNewAPI():
     # It doesn't need to do anything so we'll just pass inside it
     pass
+
 
 # We need to build out our command and we do this by inheriting from the base MPxCommand that defines commands
 # MPx prefixes denote classes we are meant to inherit from
@@ -19,32 +21,6 @@ class HelloWorldCmd(om.MPxCommand):
     # Lets add the flag names for the name flag
     kNameFlag = '-n'
     kNameLongFlag = '-name'
-
-
-    # A static method means that we can all this method without making an instance of the class first.
-    # Note that it does not take self because it has no relation to the class
-    @staticmethod
-    def cmdCreator():
-        # This function will return a new instance of our class
-        return HelloWorldCmd()
-
-
-
-    # Lets make another static method
-    # This one will let us define arguments
-    @staticmethod
-    def syntaxCreator():
-        # Make the syntax object that will handle all the parameters given to the command
-        syntax = om.MSyntax()
-
-        # Now lets add a flag to the syntax object
-        syntax.addFlag(
-            HelloWorldCmd.kNameFlag, #First give the short name
-            HelloWorldCmd.kNameLongFlag, # Then the long name of the flag
-            om.MSyntax.kString # Then we define the type of the flag
-        )
-
-        return syntax
 
     # Finally this is the function that performs the action for the command
     def doIt(self, args):
@@ -63,6 +39,28 @@ class HelloWorldCmd(om.MPxCommand):
 
         om.MGlobal.displayInfo("Hello, %s!" % name)
 
+
+# This is the function that will create our command.
+# Since our command is simple, it just needs to return an instance of the class
+def cmdCreator():
+    return HelloWorldCmd()
+
+
+# This function lets our command take arguments
+def syntaxCreator():
+    # Make the syntax object that will handle all the parameters given to the command
+    syntax = om.MSyntax()
+
+    # Now lets add a flag to the syntax object
+    syntax.addFlag(
+        HelloWorldCmd.kNameFlag,  # First give the short name
+        HelloWorldCmd.kNameLongFlag,  # Then the long name of the flag
+        om.MSyntax.kString  # Then we define the type of the flag
+    )
+
+    return syntax
+
+
 # We need to tell Maya how to initialize the plugin when it loads it.
 # Some plugins require more complex initializations, but this one is very simple
 def initializePlugin(plugin):
@@ -74,9 +72,9 @@ def initializePlugin(plugin):
             # We give it the plugin name
             HelloWorldCmd.kPluginCmdName,
             # And give it the function to create it with
-            HelloWorldCmd.cmdCreator,
+            cmdCreator,
             # Finally register the syntax creator
-            HelloWorldCmd.syntaxCreator
+            syntaxCreator
         )
     except:
         # If it fails for whatever reason, we then error out and tell our user.
@@ -96,3 +94,17 @@ def uninitializePlugin(plugin):
     except:
         om.MGlobal.displayError('Failed to deregister command: %s\n' % HelloWorldCmd.kPluginCmdName)
         raise
+
+
+"""
+To call this
+
+from Commands import helloWorldCmd
+
+try:
+    mc.unloadPlugin('helloWorldCmd')
+finally:
+    mc.loadPlugin(helloWorldCmd.__file__)
+    
+mc.hello(n="David")
+"""
