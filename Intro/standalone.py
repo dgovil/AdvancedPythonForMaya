@@ -24,6 +24,7 @@ def commands():
     # And then return it so we tally it up
     return delta
 
+
 def api():
     """This function instead uses the OpenMaya api to query the keyframes"""
     # Get the start time
@@ -56,6 +57,7 @@ def api():
     delta = time.time() - start
     return delta
 
+
 # Run our code in a loop so we can calculate the time it took
 # It's important to run it multiple times because many factors can affect the speed of how a function runs
 cmdTotal = 0
@@ -66,4 +68,4 @@ for x in range(1000):
 
 # On my machine, the API version takes almost half the time to run compared to the commands version
 print "Commands took: %ss and API took %ss" % (cmdTotal, apiTotal)
-print "Commands took %s times longer" % (cmdTotal/apiTotal)
+print "Commands took %s times longer" % (cmdTotal / apiTotal)

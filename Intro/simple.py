@@ -1,4 +1,3 @@
-
 # This imports the old Python API 1.0
 # This API is a direct wrapper around the C++ API
 from maya import OpenMaya as om1
@@ -15,7 +14,6 @@ print("Hello, World! I am writing this using the standard Python print statement
 # This has several advantages because Maya can be configured to send it to different places
 #       and we will automatically comply with it.
 om.MGlobal.displayInfo("Hello, World! I am writing this using the OpenMaya API")
-
 
 # We can also do the same using the old API
 # For the most part they are structured the same to us, the users, but internally are quite different.
