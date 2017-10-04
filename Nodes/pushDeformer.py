@@ -45,6 +45,14 @@ class PushDeformer(ompx.MPxDeformerNode):
         PushDeformer.addAttribute(PushDeformer.push)
         PushDeformer.attributeAffects(PushDeformer.push, outputGeomAttr)
 
+        # We also want to make our node paintable
+        cmds.makePaintable(
+            PushDeformer.name,
+            'weights',
+            attrType='multiFloat',
+            shapeMode='deformer'
+        )
+
     def deform(self, data, geoIterator, matrix, geometryIndex):
 
         # Get the push value
@@ -81,6 +89,11 @@ class PushDeformer(ompx.MPxDeformerNode):
             # Then calculate the offset
             # we do this by multiplying the magnitude of the normal vector by the intensity of the push and envelope
             offset = (normal * push * envelope)
+
+            # We then query the painted weight for this area
+            weight = self.weightValue(data, geometryIndex, index)
+            offset = (offset * weight)
+
             # Finally we can set the position
             geoIterator.setPosition(position+offset)
             # And always remember to go on to the next item in the list
