@@ -2,11 +2,19 @@
 
 ## Overview
 
-In this project we'll look at creating a few plugins to augment our scene.
+In this project, we'll be creating two plugins to learn about creating objects for our scene
 
-We'll be creating the following:
+* Custom Transform
 
-* A custom transform node and learning to create its own attribute editor template
-* A custom shape locator
-* Making our own viewport
+    This will teach us how to make a custom node for the scene and an accompanying 
+    Attribute Editor template.
+    
+    These custom transforms can be very useful for organizing your scene and finding assets
+    quickly.
+    
+* Custom Locator
 
+    We'll build on what we've learned from the Custom Transform and make our own locator shapes.
+    
+    We'll learn how to draw objects to the viewport using Viewport 2 with the ability to extend
+    the plugin to support multiple shapes.
