@@ -84,4 +84,12 @@ http://help.autodesk.com/view/MAYAUL/2018/ENU//?guid=__files_Setting_up_your_bui
 
 Older versions of Maya will either have it bundled or can reuse the devkits from above.
 
+## Books and Blogs
+
+There are many other bits of content that are extremely useful to learn the API.
+
+I'll be adding them here.
+
+* **Chad Vernons Blog** : http://www.chadvernon.com/blog/
+
 

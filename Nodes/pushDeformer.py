@@ -122,6 +122,7 @@ def initializePlugin(plugin):
                               )
     except:
         om.MGlobal.displayError('Failed to register node: %s' % PushDeformer.name)
+        raise
 
 def uninitializePlugin(plugin):
     pluginFn = ompx.MFnPlugin(plugin)
@@ -130,7 +131,7 @@ def uninitializePlugin(plugin):
         pluginFn.deregisterNode(PushDeformer.id)
     except:
         om.MGlobal.displayError('Failed to unregister node: %s' % PushDeformer.name)
-
+        raise
 
 """
 To load
