@@ -5,6 +5,9 @@ import maya.api.OpenMaya as om
 import maya.api.OpenMayaUI as omui
 import maya.api.OpenMayaAnim as oma
 import maya.api.OpenMayaRender as omr
+import os
+
+
 
 
 # Because we're using the OpenMaya 2 API we need to define this function again to let Maya know
@@ -42,6 +45,7 @@ class CustomLocator(omui.MPxLocatorNode):
 
     # Add attribute placeholders
     shape = None
+    color = None
 
     @classmethod
     def creator(cls):
@@ -58,6 +62,14 @@ class CustomLocator(omui.MPxLocatorNode):
             eAttr.addField(shape, i)
 
         CustomLocator.addAttribute(CustomLocator.shape)
+
+        # Now add the color attribute
+        nAttr = om.MFnNumericAttribute()
+        CustomLocator.color = nAttr.createColor('color', 'col')
+        nAttr.default = (0.5, 0.1, 0.1)
+        nAttr.storable = True
+
+        CustomLocator.addAttribute(CustomLocator.color)
 
 
 # This class is required to let us control how viewport 2 will render our node
@@ -109,13 +121,39 @@ class CustomLocatorDrawOverride(omr.MPxDrawOverride):
         # From this we get the plug and see what the value is set to
         shapePlug = om.MPlug(locator, CustomLocator.shape)
 
-        # If it's set to nothing, just exit because we can't draw anything
+        # If it can't be fetched , just exit because we can't draw anything
         if shapePlug.isNull:
             om.MGlobal.displayError('Cannot find shape plug for node')
             return data
 
-        # Set the color that we'll be drawing now so it always gets updated
-        data.color = omr.MGeometryUtilities.wireframeColor(objPath)
+        # We have to get the display status of this node
+        state = omr.MGeometryUtilities.displayStatus(objPath)
+        # If it's dormant, it means that it's not selected so we'll use the set color
+        # The ampersand operator checks if the two bit values are equal
+        # It's an efficient way to compare two states even if they are integers
+        if state & omr.MGeometryUtilities.kDormant:
+            # We get the color plug and try and get its value
+            colorPlug = om.MPlug(locator, CustomLocator.color)
+            if colorPlug.isNull:
+                # If it can't be fetched then default it
+                color = om.MColor((0.5, 0.3, 0.3))
+            else:
+                # If it is available, then lets get the color
+                color = []
+                # The color is a compound attribute so we need to get all the children
+                # We do this by looping through it
+                for channel in range(colorPlug.numChildren()):
+                    channelPlug = colorPlug.child(channel)
+                    color.append(channelPlug.asFloat())
+                color = om.MColor(color)
+
+            # Set the color that we'll be drawing now so it always gets updated
+            # data.color = omr.MGeometryUtilities.wireframeColor(objPath)
+            data.color = color
+        else:
+            # Otherwise if it is any form of selected, just shade it by the wireframe color
+            data.color = omr.MGeometryUtilities.wireframeColor(objPath)
+
 
         # Then lets see what index is set for the shape
         shape = shapePlug.asInt()
@@ -182,7 +220,16 @@ class CustomLocatorDrawOverride(omr.MPxDrawOverride):
 
         # Set the current color
         drawManager.setColor(data.color)
-        drawManager.setDepthPriority(5)
+
+        # We get the state of the current object
+        # And we use this to set its depth priority
+        # In this case, if its selected, it's always in the high priority, otherwise not
+        state =  omr.MGeometryUtilities.displayStatus(objPath)
+        if state & omr.MGeometryUtilities.kActiveComponent:
+            depthPriority = omr.MRenderItem.sActiveWireDepthPriority
+        else:
+            depthPriority = omr.MRenderItem.sDormantFilledDepthPriority
+        drawManager.setDepthPriority(depthPriority)
 
         # Set the drawing mode based on the current shading type
         if (frameContext.getDisplayStyle() & omr.MFrameContext.kGouraudShaded):
@@ -210,6 +257,19 @@ class LocatorData(om.MUserData):
 
 
 def initializePlugin(plugin):
+    # We'll sort and store the list of names in an easy to access list
+    global shapeNames
+    shapeNames = sorted(shapes.keys())
+
+    dirName = 'E:\Projects\AdvancedPythonForMaya\Scene'
+    # Maya will look for the environment vairable, MAYA_SCRIPT_PATH to look for scripts
+    MAYA_SCRIPT_PATH = os.getenv('MAYA_SCRIPT_PATH')
+    if dirName not in MAYA_SCRIPT_PATH:
+        # os.pathsep gives us the character that separates paths on your specific operating system
+        MAYA_SCRIPT_PATH += (os.pathsep + dirName)
+        os.environ['MAYA_SCRIPT_PATH'] = MAYA_SCRIPT_PATH
+
+
     pluginFn = om.MFnPlugin(plugin)
 
     try:
