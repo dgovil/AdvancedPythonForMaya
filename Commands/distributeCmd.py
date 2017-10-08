@@ -184,6 +184,7 @@ To call this
 
 from Commands import distributeCmd
 
+import maya.cmds as mc
 try:
     # Force is important because of the undo stack
     mc.unloadPlugin('distributeCmd', force=True)

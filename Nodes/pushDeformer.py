@@ -136,6 +136,8 @@ def uninitializePlugin(plugin):
 """
 To load
 from Nodes import pushDeformer
+import maya.cmds as mc
+
 try:
     # Force is important 
     mc.unloadPlugin('pushDeformer', force=True)

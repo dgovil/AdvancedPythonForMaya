@@ -100,6 +100,7 @@ def uninitializePlugin(plugin):
 To call this
 
 from Commands import helloWorldCmd
+import maya.cmds as mc
 
 try:
     mc.unloadPlugin('helloWorldCmd')

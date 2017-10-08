@@ -144,6 +144,8 @@ def uninitializePlugin(plugin):
 """
 To load
 from Nodes import minMaxNode
+import maya.cmds as mc
+
 try:
     # Force is important 
     mc.unloadPlugin('minMaxNode', force=True)
