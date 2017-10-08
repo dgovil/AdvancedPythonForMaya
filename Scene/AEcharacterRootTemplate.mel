@@ -1,0 +1,22 @@
+// We define our template by creating a simple function with the name of our node
+// The file name must also include the node name
+global proc AEcharacterRootTemplate( string $nodeName )
+{
+    # We initialize our template
+    editorTemplate -beginScrollLayout;
+
+    # Then we add the attributes to modify the node
+    editorTemplate -beginLayout "Character Attributes" -collapse 0;
+        editorTemplate -addControl "version";
+        editorTemplate -addControl "author";
+
+    # End the template
+    editorTemplate -endLayout;
+
+    # Then a little boilerplate to depend this template and the node together
+    AEdependNodeTemplate $nodeName;
+
+    # Finally close it all out
+    editorTemplate -addExtraControls;
+    editorTemplate -endScrollLayout;
+}
