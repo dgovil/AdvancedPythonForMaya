@@ -8,8 +8,6 @@ import maya.api.OpenMayaRender as omr
 import os
 
 
-
-
 # Because we're using the OpenMaya 2 API we need to define this function again to let Maya know
 def maya_useNewAPI():
     pass
@@ -154,7 +152,6 @@ class CustomLocatorDrawOverride(omr.MPxDrawOverride):
             # Otherwise if it is any form of selected, just shade it by the wireframe color
             data.color = omr.MGeometryUtilities.wireframeColor(objPath)
 
-
         # Then lets see what index is set for the shape
         shape = shapePlug.asInt()
         # If it matches the current shape, then just return the data
@@ -224,7 +221,7 @@ class CustomLocatorDrawOverride(omr.MPxDrawOverride):
         # We get the state of the current object
         # And we use this to set its depth priority
         # In this case, if its selected, it's always in the high priority, otherwise not
-        state =  omr.MGeometryUtilities.displayStatus(objPath)
+        state = omr.MGeometryUtilities.displayStatus(objPath)
         if state & omr.MGeometryUtilities.kActiveComponent:
             depthPriority = omr.MRenderItem.sActiveWireDepthPriority
         else:
@@ -257,10 +254,11 @@ class LocatorData(om.MUserData):
 
 
 def initializePlugin(plugin):
-    # We'll sort and store the list of names in an easy to access list
+    # We'll update the list when the plugin is initialized in case it changes
     global shapeNames
     shapeNames = sorted(shapes.keys())
 
+    # Also lets make sure this directory is in the path so we can load our attribute editor templat
     dirName = 'E:\Projects\AdvancedPythonForMaya\Scene'
     # Maya will look for the environment vairable, MAYA_SCRIPT_PATH to look for scripts
     MAYA_SCRIPT_PATH = os.getenv('MAYA_SCRIPT_PATH')
@@ -268,7 +266,6 @@ def initializePlugin(plugin):
         # os.pathsep gives us the character that separates paths on your specific operating system
         MAYA_SCRIPT_PATH += (os.pathsep + dirName)
         os.environ['MAYA_SCRIPT_PATH'] = MAYA_SCRIPT_PATH
-
 
     pluginFn = om.MFnPlugin(plugin)
 
