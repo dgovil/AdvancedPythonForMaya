@@ -1,15 +1,15 @@
 import inspect
-import weakref
 import logging
+import weakref
 from functools import partial
 
 from maya import cmds
 from maya.api import OpenMaya as om
 
-
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.WARNING)
+
 
 class SceneCallbackManager(object):
     """
@@ -115,8 +115,6 @@ class SceneCallbackManager(object):
             # We'll store this in the list as well
             if callbackRef not in callbackList:
                 callbackList.append(callbackRef)
-
-
 
     def __deregister(self, callback, signal=None):
         # To deregister, we do most of the same work as registering
