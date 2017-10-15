@@ -82,7 +82,8 @@ class OpenFile(object):
             self.openFile.close()
 
         # Then raise the exception we got
-        raise exc_val
+        if exc_val:
+            raise exc_val
 
 
 with OpenFile(__file__) as thisFile:
