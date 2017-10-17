@@ -138,3 +138,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+
+minMaxPlugin/build/*
+.vs
+CMakeSettings.json

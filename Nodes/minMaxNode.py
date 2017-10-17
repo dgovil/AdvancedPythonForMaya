@@ -146,6 +146,8 @@ To load
 from Nodes import minMaxNode
 import maya.cmds as mc
 
+mc.file(new=True, force=True)
+
 try:
     # Force is important 
     mc.unloadPlugin('minMaxNode', force=True)
