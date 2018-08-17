@@ -76,11 +76,14 @@ http://help.autodesk.com/view/MAYAUL/2018/ENU//?guid=__files_Setting_up_your_bui
 
 * Maya 2018
     https://www.autodesk.com/developer-network/platform-technologies/maya#
+    
     https://s3-us-west-2.amazonaws.com/autodesk-adn-transfer/ADN+Extranet/M%26E/Maya/devkit+2018/Maya2018-DEVKIT_Windows.zip
+    
     https://s3-us-west-2.amazonaws.com/autodesk-adn-transfer/ADN+Extranet/M%26E/Maya/devkit+2018/Maya2018_DEVKIT_Linux.tgz
     
 * Maya 2017 ext 3
     https://www.autodesk.com/developer-network/platform-technologies/maya#
+    
     https://s3-us-west-2.amazonaws.com/autodesk-adn-transfer/ADN+Extranet/M%26E/Maya/devkit+2017/Maya2017u3_DEVKIT_Windows.zip
 
 Older versions of Maya will either have it bundled or can reuse the devkits from above.
